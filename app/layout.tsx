@@ -1,26 +1,31 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import Layout from "@/components/Layout";
 import "./globals.css";
+import LayoutWithSession from "@/components/Layout";
+import { getServerSession } from "next-auth";
+import authOptions from '@/util/authOptions';
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "SynPay",
-  description: "The financial stack for the agentic economy.",
+  title: "SynPay | Payment Infrastructure for the Agentic Economy",
+  description: "SynPay is building the financial stack for the agentic economy.",
 };
 
-export default function RootLayout({
-  children,
+export default async function RootLayout({
+  children
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  const session = await getServerSession(authOptions);
+  
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Layout>
+        <LayoutWithSession session={session}>
           {children}
-        </Layout>
+        </LayoutWithSession>
       </body>
     </html>
   );

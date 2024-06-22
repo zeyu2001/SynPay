@@ -13,7 +13,7 @@ export interface AuthProviderProps {
   session?: Session | null;
 }
 
-const LayoutWithSession = ({ children, session }: Readonly<{ AuthProviderProps }>) => {
+const LayoutWithSession = ({ children, session }: Readonly<AuthProviderProps>) => {
 
   return (
     <SessionProvider session={session}>

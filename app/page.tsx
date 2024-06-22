@@ -11,7 +11,7 @@ const Dashboard = () => {
     <h1 className="text-3xl font-bold">Dashboard</h1>
     <div>
       <div>
-        <p className="mt-4 text-xl">Welcome back, {session.user.name}!</p>
+        <p className="mt-4 text-xl">Welcome back, {session?.user?.name}!</p>
       </div>
       <div className="mt-6 p-4 bg-gray-100 rounded shadow-md">
         <h2 className="text-lg font-semibold">Account Balance</h2>

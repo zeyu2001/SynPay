@@ -4,12 +4,14 @@ import Stripe from 'stripe';
 import { CURRENCY, MIN_AMOUNT, MAX_AMOUNT } from '@/config';
 import DB from '@/util/db';
 import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/util/authOptions';
+import authOptions from '@/util/authOptions';
+import { User } from '@prisma/client';
 
 const db = new DB();
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse<ResponseData>) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse<User | null>) {
   const session = await getServerSession(req, res, authOptions);
+  if (!session?.user?.email) return res.status(401);
 
   if (req.method === 'GET') {
     const user = await db.getUser(session.user.email);

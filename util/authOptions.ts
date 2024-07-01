@@ -13,8 +13,8 @@ const authOptions: AuthOptions = {
   ],
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
-      if (!(await db.getUser(user.email))) {
-        await db.createUser(user.email, user.name);
+      if (!(await db.getUser(user.email as string))) {
+        await db.createUser(user.email as string, user.name as string);
       }
       return true;
     },

@@ -87,30 +87,30 @@ export function TopUpDialog() {
             for this demo, e.g. 4242 4242 4242 4242.
           </DialogDescription>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
-              Amount
-            </Label>
-            <Input
-              id="amount"
-              name="amount"
-              type="number"
-              min={MIN_AMOUNT}
-              max={MAX_AMOUNT}
-              step={AMOUNT_STEP}
-              required
-              className="col-span-3"
-              value={input.amount}
-              onChange={handleInputChange}
-            />
+        <form onSubmit={handleSubmit}>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="name" className="text-right">
+                Amount
+              </Label>
+              <Input
+                id="amount"
+                name="amount"
+                type="number"
+                min={MIN_AMOUNT}
+                max={MAX_AMOUNT}
+                step={AMOUNT_STEP}
+                required
+                className="col-span-3"
+                value={input.amount}
+                onChange={handleInputChange}
+              />
+            </div>
           </div>
-        </div>
-        <DialogFooter>
-          <Button type="submit" onClick={handleSubmit}>
-            Checkout
-          </Button>
-        </DialogFooter>
+          <DialogFooter>
+            <Button type="submit">Checkout</Button>
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   );

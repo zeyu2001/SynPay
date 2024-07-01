@@ -10,9 +10,11 @@ import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { useEffect } from 'react';
 
 const ResultPage: NextPage = () => {
-  const sessionId = useSearchParams().get('session_id');
+  const searchParams = useSearchParams();
   const { toast } = useToast();
   const router = useRouter();
+
+  const sessionId = searchParams ? searchParams.get('sessionId') : null;
 
   // Fetch CheckoutSession from static page via
   // https://nextjs.org/docs/basic-features/data-fetching#static-generation

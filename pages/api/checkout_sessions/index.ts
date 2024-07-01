@@ -15,10 +15,12 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 type ResponseData = {
   message: string;
+  checkoutSession?: Stripe.Checkout.Session;
 };
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<ResponseData>) {
   const session = await getServerSession(req, res, authOptions);
+  if (!session?.user?.email) return res.status(401).json({ message: 'Unauthorized' });
 
   if (req.method === 'POST') {
     const amount = req.body.amount;
@@ -47,6 +49,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     };
     const checkoutSession: Stripe.Checkout.Session = await stripe.checkout.sessions.create(params);
     const user = await db.getUser(session.user.email);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
     await db.createCheckoutSession(checkoutSession.id, user.id);
     res.status(200).json({ message: 'Success', checkoutSession });
   } else {

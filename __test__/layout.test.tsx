@@ -1,9 +1,9 @@
-import Layout from "../components/Layout";
-import { render, screen } from "@testing-library/react";
-import { useSession } from "next-auth/react";
-import { vi, describe, it, expect } from "vitest";
+import Layout from '../components/Layout';
+import { render, screen } from '@testing-library/react';
+import { useSession } from 'next-auth/react';
+import { vi, describe, it, expect } from 'vitest';
 
-vi.mock("next-auth/react", async (importOriginal) => {
+vi.mock('next-auth/react', async importOriginal => {
   const actual = await importOriginal();
   const useSession = vi.fn();
   return { ...actual, useSession };
@@ -12,26 +12,26 @@ vi.mock("next-auth/react", async (importOriginal) => {
 global.fetch = vi.fn();
 
 function createFetchResponse(data) {
-  return { json: () => new Promise((resolve) => resolve(data)) };
+  return { json: () => new Promise(resolve => resolve(data)) };
 }
 
 fetch.mockResolvedValue(createFetchResponse({}));
 
-describe("Layout", () => {
-  it("renders correctly when signed out", () => {
-    useSession.mockResolvedValue({ data: null, status: "unauthenticated" });
+describe('Layout', () => {
+  it('renders correctly when signed out', () => {
+    useSession.mockResolvedValue({ data: null, status: 'unauthenticated' });
 
     render(<Layout />);
-    expect(screen.getByText("Sign In"));
+    expect(screen.getByText('Sign In'));
   });
 
-  it("renders correctly when signed in", () => {
+  it('renders correctly when signed in', () => {
     useSession.mockReturnValueOnce({
-      data: { user: { email: "foo@bar.com", name: "John Doe" } },
-      status: "authenticated",
+      data: { user: { email: 'foo@bar.com', name: 'John Doe' } },
+      status: 'authenticated',
     });
 
     render(<Layout />);
-    expect(screen.getByText("Dashboard"));
+    expect(screen.getByText('Dashboard'));
   });
 });

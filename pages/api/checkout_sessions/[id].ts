@@ -18,6 +18,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     res.status(200).json(checkout_session);
   } catch (err) {
-    res.status(500).json({ statusCode: 500, message: err.message });
+    res.status(500).json({ statusCode: 500, message: (err as Error).message });
   }
 }

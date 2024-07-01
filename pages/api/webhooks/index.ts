@@ -35,8 +35,8 @@ const webhookHandler = async (req: NextApiRequest, res: NextApiResponse) => {
       event = stripe.webhooks.constructEvent(buf.toString(), sig, webhookSecret);
     } catch (err) {
       // On error, log and return the error message.
-      console.log(`❌ Error message: ${err.message}`);
-      res.status(400).send(`Webhook Error: ${err.message}`);
+      console.log(`❌ Error message: ${(err as Error).message}`);
+      res.status(400).send(`Webhook Error: ${(err as Error).message}`);
       return;
     }
 
@@ -53,13 +53,17 @@ const webhookHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     } else if (event.type === 'charge.succeeded') {
       const charge = event.data.object as Stripe.Charge;
       console.log(`💵 Charge id: ${charge.id}`);
-      const paymentIntent = charge.payment_intent;
+      const paymentIntent = charge.payment_intent as string;
       const checkoutSession = (
         await stripe.checkout.sessions.list({
           payment_intent: paymentIntent,
         })
       ).data[0];
-      const userId = (await db.getCheckoutSession(checkoutSession.id)).userId;
+      const userId = (await db.getCheckoutSession(checkoutSession.id))?.userId;
+      if (!userId) {
+        console.error(`❌ User not found for session: ${checkoutSession.id}`);
+        return;
+      }
       await db.updateUserBalance(userId, charge.amount / 100);
       console.log(`🔔 User ${userId} topped up ${charge.amount}`);
     } else {

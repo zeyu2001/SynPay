@@ -14,7 +14,7 @@ const ResultPage: NextPage = () => {
   const { toast } = useToast();
   const router = useRouter();
 
-  const sessionId = searchParams ? searchParams.get('sessionId') : null;
+  const sessionId = searchParams ? searchParams.get('session_id') : null;
 
   // Fetch CheckoutSession from static page via
   // https://nextjs.org/docs/basic-features/data-fetching#static-generation

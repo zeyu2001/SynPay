@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Agent" ADD COLUMN     "public" BOOLEAN NOT NULL DEFAULT false,
+ALTER COLUMN "schema" SET DATA TYPE TEXT;

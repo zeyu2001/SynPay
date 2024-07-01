@@ -26,7 +26,7 @@ const Layout = ({ children }: Readonly<{ children: React.ReactNode }>) => {
 
   if (status === 'authenticated') {
     return (
-      <div className="flex h-screen">
+      <div className="flex min-h-screen">
         <aside className="w-64 bg-gray-100 p-4">
           <nav className="flex flex-col space-y-4">
             <Link href="/" className="flex items-center text-gray-700 hover:text-blue-500">
@@ -48,7 +48,7 @@ const Layout = ({ children }: Readonly<{ children: React.ReactNode }>) => {
     );
   }
   return (
-    <div className="flex h-screen items-center justify-center">
+    <div className="flex min-h-screen items-center justify-center">
       <div className="p-8 bg-white rounded shadow-md">
         <h1 className="mb-4 text-2xl font-bold">Sign In</h1>
         <GoogleSignInButton />

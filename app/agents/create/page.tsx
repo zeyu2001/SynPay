@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { NextPage } from 'next';
 
 const formSchema = z.object({
   name: z.string().min(2).max(255),
@@ -25,7 +26,7 @@ const formSchema = z.object({
   cost: z.coerce.number().positive(),
 });
 
-export function AgentForm() {
+const AgentForm: NextPage = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -67,10 +68,8 @@ export function AgentForm() {
           schemas: {},
         },
       }`,
-      url: '',
       balance: 0,
       cost: 0,
-      public: false,
     },
   });
 
@@ -90,7 +89,7 @@ export function AgentForm() {
               <FormControl>
                 <Input placeholder="Weather AI" {...field} />
               </FormControl>
-              <FormDescription>This is your agent's public display name.</FormDescription>
+              <FormDescription>This is your agent&apos;s public display name.</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -153,7 +152,7 @@ export function AgentForm() {
         />
         <p className="text-sm text-gray-500">
           Publishing your agent will make it available to the public. If you save it as a draft,
-          your agent can still spend money but others won't be able to access it.
+          your agent can still spend money but others won&apos;t be able to access it.
         </p>
         <Button type="submit" value="draft" variant="secondary" className="mr-4">
           Save Draft
@@ -164,6 +163,6 @@ export function AgentForm() {
       </form>
     </Form>
   );
-}
+};
 
 export default AgentForm;

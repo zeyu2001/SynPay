@@ -1,11 +1,23 @@
-"use client";
+'use client';
 
-import { useSession } from "next-auth/react";
+import { useSession } from 'next-auth/react';
+import { TopUpDialog } from '@/components/TopUpDialog';
+import useSWR from 'swr';
+import { useEffect, useState } from 'react';
+import { LoadingSpinner } from '@/components/ui/loading-spinner';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const Dashboard = () => {
   const { data: session } = useSession();
+  const { data, error, isLoading } = useSWR('/api/me', (...args) =>
+    fetch(...args).then(res => res.json()),
+  );
 
-  const handleTopUp = async () => {};
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   return (
     <div>
@@ -15,14 +27,15 @@ const Dashboard = () => {
           <p className="mt-4 text-xl">Welcome back, {session?.user?.name}!</p>
         </div>
         <div className="mt-6 p-4 bg-gray-100 rounded shadow-md">
-          <h2 className="text-lg font-semibold">Account Balance</h2>
-          <p className="text-2xl">${100}</p>
-          <button
-            onClick={handleTopUp}
-            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-          >
-            Top Up Balance
-          </button>
+          <h2 className="mb-2 text-lg font-semibold">Account Balance</h2>
+          <p className="text-3xl">
+            {isClient && isLoading ? (
+              <Skeleton className="h-8 w-[150px] bg-gray-400" />
+            ) : (
+              data?.balance
+            )}
+          </p>
+          <TopUpDialog />
         </div>
       </div>
     </div>

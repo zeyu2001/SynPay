@@ -1,5 +1,8 @@
-import GoogleProvider from "next-auth/providers/google";
-import { AuthOptions } from "next-auth";
+import GoogleProvider from 'next-auth/providers/google';
+import { AuthOptions } from 'next-auth';
+import DB from '@/util/db';
+
+const db = new DB();
 
 const authOptions: AuthOptions = {
   providers: [
@@ -10,6 +13,9 @@ const authOptions: AuthOptions = {
   ],
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
+      if (!(await db.getUser(user.email))) {
+        await db.createUser(user.email, user.name);
+      }
       return true;
     },
     async redirect({ url, baseUrl }) {

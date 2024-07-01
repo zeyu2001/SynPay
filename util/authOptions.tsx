@@ -1,5 +1,5 @@
-import GoogleProvider from 'next-auth/providers/google';
-import { AuthOptions } from 'next-auth';
+import GoogleProvider from "next-auth/providers/google";
+import { AuthOptions } from "next-auth";
 
 const authOptions: AuthOptions = {
   providers: [

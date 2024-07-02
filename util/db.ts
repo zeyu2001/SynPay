@@ -47,6 +47,79 @@ class DB {
       },
     });
   }
+
+  async upsertAgent({
+    name,
+    description,
+    schema,
+    url,
+    userId,
+    balance,
+    cost,
+    pub,
+    id,
+  }: {
+    name: string;
+    description: string;
+    schema: string;
+    url: string;
+    userId: string;
+    balance: number;
+    cost: number;
+    pub: boolean;
+    id?: string;
+  }) {
+    if (!id) {
+      return await prisma.agent.create({
+        data: {
+          name: name,
+          description: description,
+          schema: schema,
+          url: url,
+          userId: userId,
+          balance: balance,
+          cost: cost,
+          public: pub,
+        },
+      });
+    } else {
+      return await prisma.agent.update({
+        where: {
+          id: id,
+        },
+        data: {
+          name: name,
+          description: description,
+          schema: schema,
+          url: url,
+          userId: userId,
+          balance: balance,
+          cost: cost,
+          public: pub,
+        },
+      });
+    }
+  }
+
+  async getAgentByName(name: string) {
+    return await prisma.agent.findUnique({
+      where: {
+        name: name,
+      },
+    });
+  }
+
+  async getAgentById(id: string) {
+    return await prisma.agent.findUnique({
+      where: {
+        id: id,
+      },
+    });
+  }
+
+  async getAllAgents() {
+    return await prisma.agent.findMany();
+  }
 }
 
 export default DB;

@@ -3,13 +3,11 @@
 import { NextPage } from 'next';
 import useSWR from 'swr';
 import { useSession } from 'next-auth/react';
-import { AgentCard } from '@/components/AgentCard';
+import { MarketplaceAgentCard } from '@/components/MarketplaceAgentCard';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
 import { Agent } from '@prisma/client';
 
-const AgentsPage: NextPage = () => {
+const MarketplacePage: NextPage = () => {
   const { data: session } = useSession();
   const { data, error, isLoading } = useSWR('/api/agents/list', (...args) =>
     fetch(...args).then(res => res.json()),
@@ -17,12 +15,7 @@ const AgentsPage: NextPage = () => {
 
   return (
     <div>
-      <div className="align-middle flex justify-between mb-8">
-        <h1 className="text-3xl font-semibold">My Agents</h1>
-        <Link href="/agents/create">
-          <Button>+ New Agent</Button>
-        </Link>
-      </div>
+      <h1 className="text-3xl font-semibold">Public Agents</h1>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 my-8">
         {isLoading ? (
           <div className="flex flex-col space-y-3">
@@ -33,11 +26,13 @@ const AgentsPage: NextPage = () => {
             </div>
           </div>
         ) : (
-          data.mine.map((agent: Agent) => <AgentCard key={agent.id} {...agent} />)
+          data.others.map((agent: Agent) => (
+            <MarketplaceAgentCard key={agent.id} agent={agent} myAgent={data.mine} />
+          ))
         )}
       </div>
     </div>
   );
 };
 
-export default AgentsPage;
+export default MarketplacePage;

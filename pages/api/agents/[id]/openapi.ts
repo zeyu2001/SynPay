@@ -8,7 +8,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (req.method === 'GET') {
     const agent = await db.getAgentById(id as string);
     if (!agent) return res.status(404).end();
-    return res.status(200).json(agent.schema);
+    return res.status(200).json(JSON.parse(agent.schema));
   } else {
     res.setHeader('Allow', 'GET');
     res.status(405).end('Method Not Allowed');

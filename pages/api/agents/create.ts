@@ -42,9 +42,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       userId: user.id,
     });
 
+    const reqUrl = new URL(req.headers.origin as string);
     api.servers = [
       {
-        url: `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/agents/${agent.id}`,
+        url: `${reqUrl.protocol}//${reqUrl.host}/api/agents/${agent.id}`,
       },
     ];
 

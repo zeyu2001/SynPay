@@ -27,5 +27,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     data: buf,
   });
 
-  return res.status(200).json(agent);
+  return res.status(response.status).send(response.data);
 }

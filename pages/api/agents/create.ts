@@ -22,18 +22,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     } catch (error) {
       return res.status(400).json({ message: (error as Error).message });
     }
+
     const name = body.name;
     const existing = await db.getAgentByName(name);
     if (existing) {
       return res.status(400).json({ message: 'An agent with that name already exists.' });
     }
+
     const url = api.servers[0].url;
-    api.servers = [
-      {
-        url: `${req.headers.host}/api/agents/${name}`,
-      },
-    ];
-    const agent = await db.upsertAgent({
+
+    let agent = await db.upsertAgent({
       name,
       description: body.description,
       schema: JSON.stringify(api),
@@ -43,6 +41,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       url,
       userId: user.id,
     });
+
+    api.servers = [
+      {
+        url: `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/agents/${agent.id}`,
+      },
+    ];
+
+    agent = await db.upsertAgent({
+      id: agent.id,
+      name,
+      description: body.description,
+      schema: JSON.stringify(api),
+      balance: body.balance,
+      cost: body.cost,
+      pub: body.public,
+      url,
+      userId: user.id,
+    });
+
     return res.status(200).json(agent);
   } else {
     res.setHeader('Allow', 'POST');

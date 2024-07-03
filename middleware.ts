@@ -6,4 +6,4 @@ export default withAuth({
   },
 });
 
-export const config = { matcher: ['/webhooks'] };
+export const config = { matcher: ['/((?!api/webhooks|api/agents/\\w{25}).*)'] };

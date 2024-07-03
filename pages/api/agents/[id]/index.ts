@@ -13,7 +13,7 @@ export const config = {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { id } = req.query;
-  const agent = await db.getAgentById(id);
+  const agent = await db.getAgentById(id as string);
   if (!agent) return res.status(404).end();
 
   const url = agent.url;

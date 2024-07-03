@@ -37,10 +37,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const url = api.servers[0].url;
     api.servers = [
       {
-        url: `${req.headers.host}/api/agents/${name}`,
+        url: `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/agents/${agent.id}`,
       },
     ];
+
     const result = await db.upsertAgent({
+      id: agent.id,
       name,
       description: body.description,
       schema: JSON.stringify(api),
@@ -49,7 +51,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       pub: body.public,
       url,
       userId: user.id,
-      id: body.id,
     });
     return res.status(200).json(result);
   } else {

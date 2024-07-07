@@ -18,8 +18,13 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Agent } from '@prisma/client';
 import { Button } from './ui/button';
 import { AgentsComboBox } from '@/components/AgentsComboBox';
+import { useState } from 'react';
 
-export const MarketplaceAgentCard = ({ agent, myAgent }: { agent: Agent; myAgent: Agent[] }) => {
+export const MarketplaceAgentCard = ({ agent, myAgents }: { agent: Agent; myAgents: Agent[] }) => {
+  const [selectedAgent, setSelectedAgent] = useState('');
+
+  const myAgent = myAgents.find(agent => agent.name === selectedAgent) as Agent;
+
   return (
     <Card className="relative py-2">
       <CardHeader>
@@ -41,10 +46,24 @@ export const MarketplaceAgentCard = ({ agent, myAgent }: { agent: Agent; myAgent
                 <SheetDescription>
                   Here&apos;s an example of how you can use this agent with Langchain.
                 </SheetDescription>
-                <AgentsComboBox agents={myAgent} />
+                <AgentsComboBox
+                  agents={myAgents}
+                  selectedAgent={selectedAgent}
+                  setSelectedAgent={setSelectedAgent}
+                />
 
                 <pre className="p-4 bg-gray-100 rounded-lg text-sm">
-                  <code>test</code>
+                  <code>
+                    {`from langchain.chains.openai_functions.openapi import get_openapi_chain
+
+chain = get_openapi_chain(
+    "https://syn-pay.vercel.app/api/agents/${agent.id}/openapi",
+    headers={
+      'X-Agent-Id': '${myAgent ? myAgent.id : 'PLACEHOLDER'}',
+    }
+)
+chain("What are some options for a men's large blue button down shirt")`}
+                  </code>
                 </pre>
               </SheetHeader>
             </ScrollArea>

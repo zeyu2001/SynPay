@@ -27,7 +27,7 @@ const MarketplacePage: NextPage = () => {
           </div>
         ) : (
           data.others.map((agent: Agent) => (
-            <MarketplaceAgentCard key={agent.id} agent={agent} myAgent={data.mine} />
+            <MarketplaceAgentCard key={agent.id} agent={agent} myAgents={data.mine} />
           ))
         )}
       </div>

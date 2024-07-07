@@ -16,9 +16,16 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Agent } from '@prisma/client';
 
-export function AgentsComboBox({ agents }: { agents: Agent[] }) {
+export function AgentsComboBox({
+  agents,
+  selectedAgent,
+  setSelectedAgent,
+}: Readonly<{
+  agents: Agent[];
+  selectedAgent: string;
+  setSelectedAgent: (agent: string) => void;
+}>) {
   const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState('');
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -29,7 +36,9 @@ export function AgentsComboBox({ agents }: { agents: Agent[] }) {
           aria-expanded={open}
           className="w-[200px] justify-between"
         >
-          {value ? agents.find(agents => agents.name === value)?.name : 'Use with agent...'}
+          {selectedAgent
+            ? agents.find(agents => agents.name === selectedAgent)?.name
+            : 'Use with agent...'}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -44,14 +53,14 @@ export function AgentsComboBox({ agents }: { agents: Agent[] }) {
                   key={agent.name}
                   value={agent.name}
                   onSelect={currentValue => {
-                    setValue(currentValue === value ? '' : currentValue);
+                    setSelectedAgent(currentValue === selectedAgent ? '' : currentValue);
                     setOpen(false);
                   }}
                 >
                   <Check
                     className={cn(
                       'mr-2 h-4 w-4',
-                      value === agent.name ? 'opacity-100' : 'opacity-0',
+                      selectedAgent === agent.name ? 'opacity-100' : 'opacity-0',
                     )}
                   />
                   {agent.name}

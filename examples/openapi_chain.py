@@ -12,9 +12,12 @@ url = input("Enter a URL to summarize (either a webpage or a YouTube video): ")
 
 if "youtube.com" in url:
     youtube_summarizer_chain = get_openapi_chain(
-        "http://localhost:3000/api/agents/cly4g3c15000dc1wgy0h6sx74/openapi",
+        "http://localhost:3000/api/agents/cly7a3t850009fd8ogytxa7k6/openapi",
         llm,
-        verbose=True
+        verbose=True,
+        headers={
+            'X-Agent-Id': 'cly7aenwf000bfd8o33w56ou0',
+        }
     )
 
     result = youtube_summarizer_chain(url)
